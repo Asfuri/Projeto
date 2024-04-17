@@ -1,7 +1,7 @@
 compile = ["make", "-s"]
-run = "./main"
+run = "cc -Wno-unused-result main.c && ./a.out"
 entrypoint = "main.c"
-hidden = ["main", "main-debug", "**/*.o", "**/*.d", ".ccls-cache", "Makefile"]
+hidden = ["main", "a.out", "main-debug", "**/*.o", "**/*.d", ".ccls-cache", "Makefile"]
 
 [nix]
 channel = "stable-22_11"

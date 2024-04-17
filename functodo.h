@@ -18,13 +18,12 @@
 
 //definição de tipo para Tasks com nome e status
 typedef struct{
-  char *task; //nome da task 
+  char *nometask; //nome da task 
   int concluido; // ==1 concluido == 0 não concluido
 } Task;
 
 
 /*#FUNCOES*/
-
 
 //função para adicionar tasks no to-do-list
 void addtasks(FILE *arquivo){
@@ -33,12 +32,22 @@ void addtasks(FILE *arquivo){
   printf("Digite qual tarefa deseja adicionar:\n");
   scanf("%m[^\n]", &addtask);
   getchar();
-  fprintf(arquivo, "%s", addtask);
+  fprintf(arquivo, "%s\n", addtask);
 
 }
 
 //função para remover tasks do to-do-list
 void removtask(FILE *arquivo){
-
-
+  char *removtask;
+  printf("Digite qual tarefa deseja remover:\n");
+  scanf("%m[^\n]", &removtask);
+  getchar();
+  int tam = strlen(removtask);
+  for (int i=0; i<tam; i++) {
+    if (strcmp (removtask, Task.nometask[i] == 0)){
+      
+    }
+  }
+  
 }
+
