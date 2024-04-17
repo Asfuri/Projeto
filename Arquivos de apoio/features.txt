@@ -1,0 +1,52 @@
+Projeto CPrograme
+
+O objetivo do projeto é fazer um programa que possua um gerenciamento de to-do list e um gerenciamento de uma tabela semanal, sendo o gerenciamento composto por: 
+
+Adicionar, remover, editar, listar(to-do), riscar(to-do)
+
+Fluxo do programa: 
+	O usuario dele escolher entre '1 - to-do' ou '2 - agenda'
+	A partir daí o programa será bifurcado
+
+	MARCAR AS FUNCIONALIDES QUANDO ESTIVEREM PRONTAS
+	
+	Funções to-do 
+	- Adicionar task 	(x)
+	- Remover task 	(x)
+	- Editar task		(x)
+  	- Concluir task 	(x)
+	- Listar tasks 	(x)
+
+	Funções da agenda semanal (tabela)
+	- Criar agenda a partir de horario inicial e final 	(x)
+	- Adicionar eventos	(x)
+	- Remover eventos		(x)
+	- Editar eventos		(x)
+	
+*Lembre-se, os arquivos serão dististos
+- O arquivo do to-do deve conter, título, subtítulo e um cabeçalho, além do próprio to-do
+- O arquivo da agenda semanal deve conter apenas a TABELAAAA 
+WARNING: CRIAR AGENDA DEVE SOBRESCREVER TODA A AGENDA ANTERIORS
+
+*As funções, structs, unions, enum... do to-do e da agenda deve ser bibliotecas distintas sendo elas "functodo.h" e "funcagenda.h"
+
+// INFORMAÇÕES DE CONSTANTES, VARIAVEIS, FORMATAÕES E SIGNIFICADOS
+
+// Na agenda, só serão utilizados horas inteiras e positivas, levando em consideração a entrada do usuario de hora inicial e hora final. Exemplo:
+
+	"Digite a hora inicial: " R: "7"
+	"Digite a hora final: " R: "18"
+
+	Como resultado, a agenda corresponderá á: 7h | 8h | 9h | 10h | 11h ...
+
+// Ainda sobre a agenda, os dias no tipo evento será referente a sua coluna, que vai de domingo a sábado, da seguinte maneira:
+
+	1: Domingo
+	2: Segunda
+	3: Terça
+	4: Quarta
+	5: Quinta
+	6: Sexta
+	7: Sabado
+
+

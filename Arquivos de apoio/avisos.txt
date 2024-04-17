@@ -1,0 +1,13 @@
+Baixem a extensão markdown viewer, disponivel para o chromium(opera, google, etc) e firefox e edge;
+
+Por gentileza, não mexa no código sem documentar ou alertar os coleguinhas do que fez;
+
+Por gentileza, siga as features e os problemas a serem resolvidos;
+
+Siga com o fluxo do programa, e POR FAVOR, comente tudo que fez, com o //comentario ou /*comentario*/;
+
+*Salvem erros/dificuldades que encontrarem fazendo o programa*
+
+Seja cordial e compreensivo com os amiguinhos, lembre sempre que estamos aqui para aprender, então qualquer dúvida, manda discord ou no zap
+
+QUANDO FOR CODAR, CHAMA DISCORD, tamo junto, feliz ano novo <3
