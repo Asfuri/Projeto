@@ -11,10 +11,12 @@ Fluxo do programa:
 	MARCAR AS FUNCIONALIDES QUANDO ESTIVEREM PRONTAS
 	
 	Funções to-do 
+	- Fazer função para alocar tasks no array (x)
 	- Adicionar task 	(x)
 	- Remover task 	(x)
 	- Editar task		(x)
   	- Concluir task 	(x)
+	- Desconcluir task(x)
 	- Listar tasks 	(x)
 
 	Funções da agenda semanal (tabela)

@@ -14,6 +14,14 @@
 #include <stdio.h>
 #include <string.h>
 
+/*Constantes e variáveis de controle*/
+#define DOMINGO 1
+#define SEGUNDA 2
+#define TERCA   3
+#define QUARTA  4
+#define QUINTA  5
+#define SABADO  6
+
 /*#Tipos, struct, union, enum*/
 
 //definição de tipo para Eventos
