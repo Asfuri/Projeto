@@ -40,6 +40,8 @@ CÓDIGO ESTÁ APENAS O ESQUELETO!!*/
 Task *tarefas;
 FILE *toDo;
 FILE *Agenda;
+tarefas = (Task *)malloc(sizeof(Task));
+
 int main() {
 
   int resp;

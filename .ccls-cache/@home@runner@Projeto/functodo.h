@@ -41,7 +41,7 @@ void marcarConcluido(Task *task){
     //}
     
 }
-
+void listarTask(Task *)
 /*3 - 4 - 6
   -> LISTAR()
   -> Digite o numero da tarefa
@@ -92,18 +92,24 @@ void addTask(FILE *arquivo){
 }
 
 //função para remover tasks do to-do-list
-void removtask(Task *task[]){
+void removtask(Task *task[], int *tamanho){
+  int n; //indice a ser removido
+  printf("Qual número da task deseja remover?\n");
+  //função de imprimir opções
+  scanf("%i", &n);
+  if(n<1 || n>*tamanho){
+    printf("Índice inválido\n");
+    return 1;
+  }
+  n--;//ajustar o indice para o vetor
+  int indiceremover = task[n].concluido;
+  //deslocar as strings para preencher o espaço
+  for(int i=n, i < *tamanho-1; i++){
+    task[i] = task[i+1];
+  }
 
-  task[i] = NULL;
-  //printf("Digite qual tarefa deseja remover:\n");
-  //scanf("%m[^\n]", &removetask);
-  //getchar();
-  //int tam = strlen(removetask);
-  //for (int i=0; i<tam; i++) {
-    //if (strcmp (removetask, Task.nometask[i] == 0)){
-      
-    //}
-  //}
-  
+  (*tamanho)--;
+  printf("Tarefa removida com sucesso!\n");
+ 
 }
 
