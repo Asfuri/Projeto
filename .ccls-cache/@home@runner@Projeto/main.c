@@ -24,11 +24,10 @@ void printToDoOptions() {
 //     Função de imprimir na tela as opcões da Agenda
 //     Deve ser chamada dentro de um escopo pos-bifucacao de fluxo
 void printAgendaOptions() {
-  printf("\n\n");
-  printf("1. Criar Agenda\n");
-  printf("2. Adicionar eventos\n");
-  printf("3. Remover eventos\n");
-  printf("4. Remover eventos\n");
+  printf("\n1. Criar Agenda\n");
+  printf("2. Adicionar evento\n");
+  printf("3. Remover evento\n");
+  printf("4. Editar evento\n");
   printf("Escolha uma opção: ");
 }
 
@@ -45,6 +44,9 @@ FILE *Agenda;
 int main() {
 
   int resp;
+  int opcaoEmAgenda;
+  int min, max, diaAlterar, horaAlterar;
+  char horaFormatada[4];
   do {
     //  opção para escolher entre to-do-list e agenda semanal
     //  Condição de acorodo com opção para desvio de fluxo do programa
@@ -94,7 +96,7 @@ int main() {
       scanf("%d", &opcaoEmToDo);
       switch (opcaoEmToDo){
         case 1: // adicionar task
-          addTask(toDo);
+          // addTask(toDo);
           break;
         case 2: //remover task
           printf("Digite qual número da task que deseja remover:\n");
@@ -114,10 +116,46 @@ int main() {
     break; 
     case 2:
       // fluxo para agenda
-      // int opcaoEmAgenda = 0;
-      // printAgendaOptions();
-      // printf("%d", opcaoEmAgenda);
-      // break;
+      printAgendaOptions();
+      scanf("%d", &opcaoEmAgenda);
+      switch (opcaoEmAgenda){
+        case 1: // Criar Agenda
+          printf("\nAviso! Se houver agenda, sera sobrescrita!\n");
+          printf("Digite a hora inicial(0 a 24): ");
+          scanf("%d", &min);
+          printf("Digite a hora final(%d a 24): ", min);
+          scanf("%d", &max);
+          // testa se o usuario digitou horas validas
+          // Se não, ele vai para a proxima iteracao (menu inicial)
+          if(!(min < max) || (!(min > 0 && min < 24) || !(max < 24))){
+            printf("Voce digitou horas invalidas!\n");
+            continue;
+          }
+          criarAgenda(Agenda, min, max);
+        break;
+        case 2: // Adicionar evento
+          printf("1 - Domingo \t 2 - Segunda \t 3 - Terça \n4 - Quarta \t 5 - Quinta \t 6 - Sexta \t 7 - Sábado\n");
+          printf("Digite o dia em que voce quer criar o evento: ");
+          scanf("%d", &diaAlterar);
+          printf("Digite a hora em que voce quer criar o evento: ");
+          scanf("%d", &horaAlterar);
+          // testa se o usuario digitou horas validas
+          if(diaAlterar >= 1 && diaAlterar <= 7 && horaAlterar > min){
+            // pode ocorrer de min e max nao terem valores, pois a agenda foi criada a partir de um erro de falta de agenda
+            sprintf(horaFormatada, "%dh", horaAlterar); 
+            // adicionarEvento(Agenda, diaAlterar, horaFormatada, horaAlterar);
+          }else
+            printf("Voce digitou algo inválido!\n");
+          continue;
+        break;
+        case 3:
+          // removerEvento();
+        break;
+        case 4:
+          // editarEvento();
+        break;
+      }
+      break;
 
     default:
       printf("Encerrando programa...");
