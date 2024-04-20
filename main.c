@@ -1,10 +1,10 @@
 /*#Bibliotecas*/
-#include "funcagenda.h"
-#include "functodo.h"
-#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
+#include "functodo.h"
+#include "funcagenda.h"
 
 /*#Constantes e Variaveis de controle de escopo geral*/
 /*#Funcoes de menu/interface*/

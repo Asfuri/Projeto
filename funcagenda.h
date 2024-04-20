@@ -9,10 +9,10 @@
 */
 
 /*#Bibliotecas*/
-#include <locale.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 /*Constantes e variáveis de controle*/
 #define DOMINGO 1

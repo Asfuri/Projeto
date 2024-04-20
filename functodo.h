@@ -9,10 +9,10 @@
 */
 
 /*#Bibliotecas*/
-#include <locale.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 /*#Tipos, struct, union, enum*/
 
@@ -26,19 +26,18 @@ void marcarConcluido(Task *task){
   char resp;
   if(task->concluido == 0){
     task->concluido = 1;
-    //printf("Task marcada com sucesso\n");
+    printf("Marcada como concluida com sucesso\n");
   }
-  //else{
-    //printf("Task já está como concluida\n");
-    //printf("Deseja desmarcar?\n");
-    //scanf(" %c", &resp);
-  //}
-    //if(resp == 's'){
-      //task->concluido = 0;
-    //}
-    //else{
-      //printf("Ok, não foi desmarcado\n");
-    //}
+    printf("Task já está como concluida\n");
+    printf("Deseja desmarcar?\n");
+    scanf(" %c", &resp);
+    if(resp == 's'){
+      task->concluido = 0;
+      printf("Desmarcado com sucesso!\n");
+    }
+    else{
+      printf("Ok, não foi desmarcado\n");
+    }
     
 }
 // void listarTask(Task *)
@@ -81,13 +80,15 @@ printf("Qual task quer mudar:")
 /*#FUNCOES*/
 
 //função para adicionar tasks no to-do-list
-void addTask(FILE *arquivo){
+void addTask(FILE *arquivo, Task *novatarefa){
   char *addtask;
   printf("Digite qual tarefa deseja adicionar:\n");
   scanf("%m[^\n]", &addtask);
   getchar();
-  
-  fprintf(arquivo, "%s\n", addtask);
+
+  novatarefa->concluido = 0;
+  //imprime no arquivo a nova task, e em seguida marcada como concluída caso = 1 e 0 como não(definido como padrao);
+  fprintf(arquivo, "%s - %s\n", addtask, novatarefa->concluido ? "Concluída" : "Não concluída");
 
 }
 
