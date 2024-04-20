@@ -40,7 +40,7 @@ CÓDIGO ESTÁ APENAS O ESQUELETO!!*/
 Task *tarefas;
 FILE *toDo;
 FILE *Agenda;
-tarefas = (Task *)malloc(sizeof(Task));
+// tarefas = (Task *)malloc(sizeof(Task));
 
 int main() {
 
@@ -99,24 +99,25 @@ int main() {
         case 2: //remover task
           printf("Digite qual número da task que deseja remover:\n");
           scanf("%d", &remover);
-          removtask(remover);
+          // removtask(remover);
           break;
         case 3: //marcar task como concluida
           printf("Deseja marcar qual task como concluida?\n");
           // listasTasks();
           //função listar task com os indices
-          marcarConcluido(Task *task[i]);
+          // marcarConcluido(tarefas[i]);
           printf("Task marcada como concluída com sucesso!\n");
           break;
         case 4: //listar tasks ja cadastradas
+        break; 
       }
-      break;
+    break; 
     case 2:
       // fluxo para agenda
-      int opcaoEmAgenda = 0;
-      printAgendaOptions();
-      printf("%d", opcaoEmAgenda);
-      break;
+      // int opcaoEmAgenda = 0;
+      // printAgendaOptions();
+      // printf("%d", opcaoEmAgenda);
+      // break;
 
     default:
       printf("Encerrando programa...");

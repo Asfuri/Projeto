@@ -19,7 +19,7 @@
 //definição de tipo para Tasks com nome e status
 typedef struct{
   char *nometask; //nome da task 
-  int concluido = 0; // ==1 concluido == 0 não concluido
+  int concluido; // ==1 concluido == 0 não concluido
 } Task;
 
 void marcarConcluido(Task *task){
@@ -41,7 +41,7 @@ void marcarConcluido(Task *task){
     //}
     
 }
-void listarTask(Task *)
+// void listarTask(Task *)
 /*3 - 4 - 6
   -> LISTAR()
   -> Digite o numero da tarefa
@@ -99,16 +99,16 @@ void removtask(Task *task[], int *tamanho){
   scanf("%i", &n);
   if(n<1 || n>*tamanho){
     printf("Índice inválido\n");
-    return 1;
+    return;
   }
   n--;//ajustar o indice para o vetor
-  int indiceremover = task[n].concluido;
+  int indiceremover = task[n]->concluido;
   //deslocar as strings para preencher o espaço
-  for(int i=n, i < *tamanho-1; i++){
+  for(int i=n; i < (*tamanho)-1; i++){
     task[i] = task[i+1];
   }
 
-  (*tamanho)--;
+  --(*tamanho);
   printf("Tarefa removida com sucesso!\n");
  
 }
