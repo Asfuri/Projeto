@@ -20,7 +20,8 @@
 #define TERCA   3
 #define QUARTA  4
 #define QUINTA  5
-#define SABADO  6
+#define SEXTA   6
+#define SABADO  7
 
 /*#Tipos, struct, union, enum*/
 
