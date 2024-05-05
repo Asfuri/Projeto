@@ -19,44 +19,9 @@
 //definição de tipo para Tasks com nome e status
 typedef struct{
   char *nometask; //nome da task 
-  int concluido; // ==1 concluido == 0 não concluido
+  int concluido; // == 1 concluido == 0 não concluido
 } Task;
 
-// void marcarConcluido(Task *task){
-//   char resp;
-//   if(task->concluido == 0){
-//     task->concluido = 1;
-//     printf("Marcada como concluida com sucesso\n");
-//   }
-//     printf("Task já está como concluida\n");
-//     printf("Deseja desmarcar?\n");
-//     scanf(" %c", &resp);
-//     if(resp == 's'){
-//       task->concluido = 0;
-//       printf("Desmarcado com sucesso!\n");
-//     }
-//     else{
-//       printf("Ok, não foi desmarcado\n");
-//     }
-    
-// }
-// void listarTask(Task *)
-/*3 - 4 - 6
-  -> LISTAR()
-  -> Digite o numero da tarefa
-  -> concluida 
-  -> C -> XXXX
-  -> I -> C
-  -> inconcluda
-  -> C -> I
-  -> I -> XXXX
-*/
-// void alternarConcluir(Task *task){
-//   if(task->concluido == 1)
-//     task->concluido = 0;
-//   else 
-//     task->concluido = 1;
-// }
 void listarTasks(Task *ArrayTasks, int tamanho) {
     for(int i = 0; i < tamanho; i++) {
         printf("%d - ", i+1);
@@ -83,54 +48,57 @@ void alterarStatus(int indice, Task *ArrayTasks, int tamanho, FILE *arquivo) {
             fprintf(arquivo, "\n- [x] %s", ArrayTasks[i].nometask);
     }
 }
-/*while(){
-  if(Task.concluido != 0){
-    Printf("Tasks Concluidas: %s", Task.nometask[i][]);
-  }
-  1. - 
-  2. - 
-  3. - 
-printf("Qual task quer mudar:")
-  for(int i=0; i< N;i++ ){
-    if(Task.nome[i+1] == Task.nome[N]){
-      marcarcomoconluida(Task.nome[i];)
-    }
-  }
-}*/
+
 /*#FUNCOES*/
 
 //função para adicionar tasks no to-do-list
-void addTask(FILE *arquivo, Task *ArrayTasks, int ultimo){
+void addTask(FILE *arquivo, Task **ArrayTasks, int *ultimo){
   printf("Digite qual tarefa deseja adicionar:\n");
   getchar();
   fflush(stdin);
-  scanf("%m[^\n]", &ArrayTasks[ultimo].nometask);
+  
+  // Alocar memoria para Tarefa
+  Task *newTask = (Task*) malloc(sizeof(Task));
+  
+  // Alocar memória para o nome da tarefa
+  newTask->nometask = (char*) malloc(100 * sizeof(char));
+  
+  // Ler o nome da tarefa
+  scanf("%m[^\n]", &(newTask->nometask));
   getchar();
 
+  // Colocar a tarefa como não concluída
+  newTask->concluido = 0;
+
+  // Adicionar a tarefa ao array
+  ArrayTasks[*ultimo] = newTask;
+
+  // Colocar a tarefa no arquivo
   fseek(arquivo, 0, SEEK_END);
-  ArrayTasks[ultimo].concluido = 0;
-  fprintf(arquivo, "\n- [ ] %s", ArrayTasks[ultimo].nometask);
+  fprintf(arquivo, "\n- [ ] %s", ArrayTasks[*ultimo]->nometask);
+
+  // Aumentar a contagem de tarefas
+  (*ultimo)++;
 }
 
 //função para remover tasks do to-do-list
-void removtask(Task *task[], int *tamanho){
-  int n; //indice a ser removido
-  printf("Qual número da task deseja remover?\n");
-  //função de imprimir opções
-  scanf("%i", &n);
-  if(n<1 || n>*tamanho){
-    printf("Índice inválido\n");
-    return;
-  }
-  n--;//ajustar o indice para o vetor
-  int indiceremover = task[n]->concluido;
-  //deslocar as strings para preencher o espaço
-  for(int i=n; i < (*tamanho)-1; i++){
-    task[i] = task[i+1];
+void removerTask(int indice, Task **ArrayTasks, int *tamanho, FILE *arquivo) {
+  // Remover a tarefa do array
+  free(ArrayTasks[indice]);
+  for (int i = indice; i < *tamanho - 1; i++) {
+    ArrayTasks[i] = ArrayTasks[i + 1];
   }
 
-  --(*tamanho);
-  printf("Tarefa removida com sucesso!\n");
- 
+  // Diminuir o número de tarefas
+  (*tamanho)--;
+
+  // Reescrever todas as tarefas no arquivo
+  fseek(arquivo, 0, SEEK_SET);
+  for(int i = 0; i < *tamanho; i++) {
+    if(ArrayTasks[i]->concluido == 0)
+      fprintf(arquivo, "\n- [ ] %s", ArrayTasks[i]->nometask);
+    else
+      fprintf(arquivo, "\n- [x] %s", ArrayTasks[i]->nometask);
+  }
 }
 

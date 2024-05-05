@@ -70,23 +70,26 @@ int main() {
       scanf("%d", &opcaoEmToDo);
       switch (opcaoEmToDo){
         case 1: // adicionar task
-          addTask(toDo, ArrayTasks, quantTasks);
+          addTask(toDo, &ArrayTasks, &quantTasks);
           quantTasks++;
           ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
         break;
-        case 2: //marcar task como concluida
-          printf("Deseja alterar a status de qual task?\n");
-          // listasTasks();
-          //função listar task com os indices
-          // marcarConcluido(tarefas[i]);
+        case 2: // alterar status da tarefa
+          listarTasks(tarefas, quantTasks);
+          // função listar task com os indices
+          printf("Deseja alterar o status de qual task?\n");
+          int numTarefa;
+          fflush(stdin);
+          scanf("%d", &numTarefa);
+          alterarStatus(numTarefa, tarefas, quantTasks, toDo);
           printf("Task marcada como concluída com sucesso!\n");
           break;
-        case 4: //remover task
+        case 4: // remover tarefa
           printf("Digite qual número da task que deseja remover:\n");
           scanf("%d", &remover);
           // removtask(remover);
           break;
-        case 5: //listar tasks ja cadastradas
+        case 5: // listar tarefas ja cadastradas
           
         break; 
       }
