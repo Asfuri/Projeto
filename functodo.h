@@ -22,24 +22,24 @@ typedef struct{
   int concluido; // ==1 concluido == 0 não concluido
 } Task;
 
-void marcarConcluido(Task *task){
-  char resp;
-  if(task->concluido == 0){
-    task->concluido = 1;
-    printf("Marcada como concluida com sucesso\n");
-  }
-    printf("Task já está como concluida\n");
-    printf("Deseja desmarcar?\n");
-    scanf(" %c", &resp);
-    if(resp == 's'){
-      task->concluido = 0;
-      printf("Desmarcado com sucesso!\n");
-    }
-    else{
-      printf("Ok, não foi desmarcado\n");
-    }
+// void marcarConcluido(Task *task){
+//   char resp;
+//   if(task->concluido == 0){
+//     task->concluido = 1;
+//     printf("Marcada como concluida com sucesso\n");
+//   }
+//     printf("Task já está como concluida\n");
+//     printf("Deseja desmarcar?\n");
+//     scanf(" %c", &resp);
+//     if(resp == 's'){
+//       task->concluido = 0;
+//       printf("Desmarcado com sucesso!\n");
+//     }
+//     else{
+//       printf("Ok, não foi desmarcado\n");
+//     }
     
-}
+// }
 // void listarTask(Task *)
 /*3 - 4 - 6
   -> LISTAR()
@@ -57,11 +57,31 @@ void marcarConcluido(Task *task){
 //   else 
 //     task->concluido = 1;
 // }
+void listarTasks(Task *ArrayTasks, int tamanho) {
+    for(int i = 0; i < tamanho; i++) {
+        printf("%d - ", i+1);
+        if(ArrayTasks[i].concluido == 0)
+            printf("[ ] ");
+        else
+            printf("[x] ");
+        printf("%s\n", ArrayTasks[i].nometask);
+    }
+}
+void alterarStatus(int indice, Task *ArrayTasks, int tamanho, FILE *arquivo) {
+    // Alterar o status da tarefa no array
+    if(ArrayTasks[indice].concluido == 0)
+        ArrayTasks[indice].concluido = 1;
+    else
+        ArrayTasks[indice].concluido = 0;
 
-void desmarcarConcluido(Task *task){
-  if(task->concluido == 1){
-    task->concluido = 0;
-  }
+    // Reescrever todas as tarefas no arquivo
+    fseek(arquivo, 0, SEEK_SET);
+    for(int i = 0; i < tamanho; i++) {
+        if(ArrayTasks[i].concluido == 0)
+            fprintf(arquivo, "\n- [ ] %s", ArrayTasks[i].nometask);
+        else
+            fprintf(arquivo, "\n- [x] %s", ArrayTasks[i].nometask);
+    }
 }
 /*while(){
   if(Task.concluido != 0){

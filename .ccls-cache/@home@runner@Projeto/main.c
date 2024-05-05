@@ -15,11 +15,10 @@
 void printToDoOptions() {
   printf("\n\n");
   printf("1. Adicionar tasks\n");
-  printf("2. Concluir task\n");
-  printf("3. Remover conclusão da task\n");
-  printf("4. Editar task\n");
-  printf("5. Remover task\n");
-  printf("6. Listar tasks\n");
+  printf("2. Mudar status da task\n");
+  printf("3. Editar task\n");
+  printf("4. Remover task\n");
+  printf("5. Listar tasks\n");
 }
 
 //     Função de imprimir na tela as opcões da Agenda
@@ -75,19 +74,20 @@ int main() {
           quantTasks++;
           ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
         break;
-        case 2: //remover task
-          printf("Digite qual número da task que deseja remover:\n");
-          scanf("%d", &remover);
-          // removtask(remover);
-          break;
-        case 3: //marcar task como concluida
-          printf("Deseja marcar qual task como concluida?\n");
+        case 2: //marcar task como concluida
+          printf("Deseja alterar a status de qual task?\n");
           // listasTasks();
           //função listar task com os indices
           // marcarConcluido(tarefas[i]);
           printf("Task marcada como concluída com sucesso!\n");
           break;
-        case 4: //listar tasks ja cadastradas
+        case 4: //remover task
+          printf("Digite qual número da task que deseja remover:\n");
+          scanf("%d", &remover);
+          // removtask(remover);
+          break;
+        case 5: //listar tasks ja cadastradas
+          
         break; 
       }
     break; 
@@ -139,5 +139,5 @@ int main() {
       exit(1);
       break;
     }
-  } while (resp != 3);
+  } while (resp == 1 || resp == 2);
 }
