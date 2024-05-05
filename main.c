@@ -48,6 +48,9 @@ int main() {
   int opcaoEmAgenda;
   int min, max, diaAlterar, horaAlterar;
   char horaFormatada[4];
+  int quantTasks = 0;
+  Task *ArrayTasks;
+  ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
   do {
     //  opção para escolher entre to-do-list e agenda semanal
     //  Condição de acorodo com opção para desvio de fluxo do programa
@@ -68,8 +71,10 @@ int main() {
       scanf("%d", &opcaoEmToDo);
       switch (opcaoEmToDo){
         case 1: // adicionar task
-          // addTask(toDo);
-          break;
+          addTask(toDo, ArrayTasks, quantTasks);
+          quantTasks++;
+          ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
+        break;
         case 2: //remover task
           printf("Digite qual número da task que deseja remover:\n");
           scanf("%d", &remover);

@@ -80,16 +80,16 @@ printf("Qual task quer mudar:")
 /*#FUNCOES*/
 
 //função para adicionar tasks no to-do-list
-void addTask(FILE *arquivo, Task *novatarefa){
-  char *addtask;
+void addTask(FILE *arquivo, Task *ArrayTasks, int ultimo){
   printf("Digite qual tarefa deseja adicionar:\n");
-  scanf("%m[^\n]", &addtask);
+  getchar();
+  fflush(stdin);
+  scanf("%m[^\n]", &ArrayTasks[ultimo].nometask);
   getchar();
 
-  novatarefa->concluido = 0;
-  //imprime no arquivo a nova task, e em seguida marcada como concluída caso = 1 e 0 como não(definido como padrao);
-  fprintf(arquivo, "%s - %s\n", addtask, novatarefa->concluido ? "Concluída" : "Não concluída");
-
+  fseek(arquivo, 0, SEEK_END);
+  ArrayTasks[ultimo].concluido = 0;
+  fprintf(arquivo, "\n- [ ] %s", ArrayTasks[ultimo].nometask);
 }
 
 //função para remover tasks do to-do-list
