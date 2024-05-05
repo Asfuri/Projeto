@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Wno-unused-result
 
 all: main
 
-main: main.c funcagenda.h functodo.h
+main: main.c
 	$(CC) $(CFLAGS) -o main main.c
 
 clean:

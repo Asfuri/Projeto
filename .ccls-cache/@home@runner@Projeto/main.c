@@ -1,146 +1,233 @@
-/*#Bibliotecas*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
-#include "functodo.h"
-#include "funcagenda.h"
-#include "novotodo.h"
 
-/*#Constantes e Variaveis de controle de escopo geral*/
-/*#Funcoes de menu/interface*/
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+typedef struct {
+  char *nometask;
+  int concluido;
+} Task;
 
-//     Função de imprimir na tela as opcões do To-do
-//     Deve ser chamada dentro de um escopo pós-bifucacao de fluxo
-void printToDoOptions() {
-  printf("\n\n");
-  printf("1. Adicionar tasks\n");
-  printf("2. Mudar status da task\n");
-  printf("3. Editar task\n");
-  printf("4. Remover task\n");
-  printf("5. Listar tasks\n");
+void lerTam(FILE *arquivo, int *tam, Task **ArrayTasks) {
+  char linha[256];
+  int numTarefas = 0;
+  int encontrouLinhaHorizontal = 0;
+
+  while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+    if (!encontrouLinhaHorizontal) {
+      if (strcmp(linha, "***\n") == 0) {
+        encontrouLinhaHorizontal = 1;
+      }
+      continue;
+    }
+
+    if (strncmp(linha, "- [ ]", 5) == 0 || strncmp(linha, "- [x]", 5) == 0) {
+      char *nome = strdup(linha + 5);
+      nome[strcspn(nome, "\n")] = '\0';
+
+      *ArrayTasks = (Task *)realloc(*ArrayTasks, (numTarefas + 1) * sizeof(Task));
+      if (*ArrayTasks == NULL) {
+        printf("Erro ao realocar memória\n");
+        exit(1);
+      }
+
+      (*ArrayTasks)[numTarefas].nometask = nome;
+      (*ArrayTasks)[numTarefas].concluido = (linha[3] == 'x');
+
+      numTarefas++;
+    }
+  }
+  *tam = numTarefas;
 }
 
-//     Função de imprimir na tela as opcões da Agenda
-//     Deve ser chamada dentro de um escopo pos-bifucacao de fluxo
-void printAgendaOptions() {
-  printf("\n1. Criar Agenda\n");
-  printf("2. Adicionar evento\n");
-  printf("3. Remover evento\n");
-  printf("4. Editar evento\n");
-  printf("Escolha uma opção: ");
+void novoTodo(FILE *toDo, int *tam, Task **ArrayTasks) {
+  if (toDo == NULL) {
+    char *titulo, *subTitulo, *descricaoToDo;
+    printf("Inicializando arquivo!\n");
+    toDo = fopen("tasks.md", "w+");
+    printf("Digite o título: ");
+    scanf("%m[^\n]", &titulo);
+    printf("Digite o subtitulo: ");
+    limparBuffer();
+    scanf("%m[^\n]", &subTitulo);
+    limparBuffer();
+    printf("PARA QUEBRA DE LINHA: \"<br>\"\n");
+    printf("Digite a descrição ('.' para parar): \n");
+    scanf("%m[^.]", &descricaoToDo);
+    limparBuffer();
+
+    fprintf(toDo, "# %s\n## %s\n%s\n***", titulo, subTitulo, descricaoToDo);
+    fflush(toDo); // Libera as alterações no arquivo
+    fclose(toDo);
+    toDo = fopen("tasks.md", "r+"); // Reabre o arquivo aqui
+  } else {
+    fclose(toDo); // Fecha o arquivo antes de reabri-lo
+    toDo = fopen("tasks.md", "r+");
+  }
+  lerTam(toDo, tam, ArrayTasks);
+  int numTarefas = *(tam);
+  printf("Quantidade de tarefas: %d\n", numTarefas);
+  for (int i = 0; i < numTarefas; i++) {
+    printf("Tarefa %d: %s (%s)\n", i + 1, (*ArrayTasks)[i].nometask, (*ArrayTasks)[i].concluido ? "Concluída" : "Não concluída");
+  }
 }
 
-/*vai printar tudo em arquivo, "r+"
-switch case para o usuario escolher entre o
-to-do-list e a agenda semanal
-CÓDIGO ESTÁ APENAS O ESQUELETO!!*/
+void addTask(FILE *arquivo, Task **ArrayTasks, int *quantTasks) {
+  printf("Digite qual tarefa deseja adicionar:\n");
+  char nomeTarefa[256];
+  scanf(" %[^\n]", nomeTarefa);
 
-Task *tarefas;
-FILE *toDo;
-FILE *Agenda;
-// tarefas = (Task *)malloc(sizeof(Task));
+  *ArrayTasks = (Task *)realloc(*ArrayTasks, (*quantTasks + 1) * sizeof(Task));
+  if (*ArrayTasks == NULL) {
+    printf("Erro ao realocar memória\n");
+    exit(1);
+  }
 
-int main() {
+  (*ArrayTasks)[*quantTasks].nometask = strdup(nomeTarefa);
+  (*ArrayTasks)[*quantTasks].concluido = 0;
 
-  int resp;
-  int opcaoEmAgenda;
-  int min, max, diaAlterar, horaAlterar;
-  char horaFormatada[4];
-  int quantTasks = 0;
-  Task *ArrayTasks;
-  ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
-  do {
-    //  opção para escolher entre to-do-list e agenda semanal
-    //  Condição de acorodo com opção para desvio de fluxo do programa
-    printf("Qual função deseja acessar?\n1. Acessar To-Do-List\n2. Acessar Agenda\n3. Para sair do programa\n");
-    scanf("%d", &resp);
-    // opcao para escolher entre to-do ou agenda
+  fseek(arquivo, 0, SEEK_END);
+  fprintf(arquivo, "\n- [ ] %s", (*ArrayTasks)[*quantTasks].nometask);
+  fflush(arquivo);
+  (*quantTasks)++;
+}
 
-    switch (resp) {
+void listarTasks(Task *ArrayTasks, int tamanho) {
+  for (int i = 0; i < tamanho; i++) {
+    printf("%d - ", i + 1);
+    if (ArrayTasks[i].concluido == 0)
+      printf("[ ] ");
+    else
+      printf("[x] ");
+    printf("%s\n", ArrayTasks[i].nometask);
+  }
+}
 
-    case 1:
-      // to do list
+void alterarStatus(int indice, Task *ArrayTasks, int tamanho, FILE *arquivo) {
+  if (indice < 0 || indice >= tamanho) {
+    printf("Índice inválido\n");
+    return;
+  }
 
-      toDo = fopen("tasks.md", "r+");
-      novoTodo(toDo);
-      int remover;
-      int opcaoEmToDo;
-      printToDoOptions();
-      scanf("%d", &opcaoEmToDo);
-      switch (opcaoEmToDo){
-        case 1: // adicionar task
-          addTask(toDo, &ArrayTasks, &quantTasks);
-          quantTasks++;
-          ArrayTasks = realloc(ArrayTasks, sizeof(Task)*(quantTasks+1));
-        break;
-        case 2: // alterar status da tarefa
-          listarTasks(tarefas, quantTasks);
-          // função listar task com os indices
-          printf("Deseja alterar o status de qual task?\n");
-          int numTarefa;
-          fflush(stdin);
-          scanf("%d", &numTarefa);
-          alterarStatus(numTarefa, tarefas, quantTasks, toDo);
-          printf("Task marcada como concluída com sucesso!\n");
-          break;
-        case 4: // remover tarefa
-          printf("Digite qual número da task que deseja remover:\n");
-          scanf("%d", &remover);
-          // removtask(remover);
-          break;
-        case 5: // listar tarefas ja cadastradas
-          
-        break; 
+  if (ArrayTasks[indice].concluido == 0)
+    ArrayTasks[indice].concluido = 1;
+  else
+    ArrayTasks[indice].concluido = 0;
+
+  // Armazenar o conteúdo antes das tarefas
+  char linha[256];
+  char conteudoAntesDasTarefas[1024] = "";
+  int encontrouLinhaHorizontal = 0;
+  fseek(arquivo, 0, SEEK_SET);
+  while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+    if (!encontrouLinhaHorizontal) {
+      strcat(conteudoAntesDasTarefas, linha);
+      if (strcmp(linha, "***\n") == 0) {
+        encontrouLinhaHorizontal = 1;
       }
-    break; 
-    case 2:
-      // fluxo para agenda
-      printAgendaOptions();
-      scanf("%d", &opcaoEmAgenda);
-      switch (opcaoEmAgenda){
-        case 1: // Criar Agenda
-          printf("\nAviso! Se houver agenda, sera sobrescrita!\n");
-          printf("Digite a hora inicial(0 a 24): ");
-          scanf("%d", &min);
-          printf("Digite a hora final(%d a 24): ", min);
-          scanf("%d", &max);
-          // testa se o usuario digitou horas validas
-          // Se não, ele vai para a proxima iteracao (menu inicial)
-          if(!(min < max) || (!(min > 0 && min < 24) || !(max < 24))){
-            printf("Voce digitou horas invalidas!\n");
-            continue;
-          }
-          criarAgenda(Agenda, min, max);
-        break;
-        case 2: // Adicionar evento
-          printf("1 - Domingo \t 2 - Segunda \t 3 - Terça \n4 - Quarta \t 5 - Quinta \t 6 - Sexta \t 7 - Sábado\n");
-          printf("Digite o dia em que voce quer criar o evento: ");
-          scanf("%d", &diaAlterar);
-          printf("Digite a hora em que voce quer criar o evento: ");
-          scanf("%d", &horaAlterar);
-          // testa se o usuario digitou horas validas
-          if(diaAlterar >= 1 && diaAlterar <= 7 && horaAlterar > min){
-            // pode ocorrer de min e max nao terem valores, pois a agenda foi criada a partir de um erro de falta de agenda
-            sprintf(horaFormatada, "%dh", horaAlterar); 
-            // adicionarEvento(Agenda, diaAlterar, horaFormatada, horaAlterar);
-          }else
-            printf("Voce digitou algo inválido!\n");
-          continue;
-        break;
-        case 3:
-          // removerEvento();
-        break;
-        case 4:
-          // editarEvento();
-        break;
-      }
-      break;
-
-    default:
-      printf("Encerrando programa...");
-      exit(1);
+    } else {
       break;
     }
-  } while (resp == 1 || resp == 2);
+  }
+
+  // Reescrever o arquivo
+  fseek(arquivo, 0, SEEK_SET);
+  fprintf(arquivo, "%s", conteudoAntesDasTarefas);
+  for (int i = 0; i < tamanho; i++) {
+    if (i != 0) {
+      fprintf(arquivo, "\n");
+    }
+    if (ArrayTasks[i].concluido == 0)
+      fprintf(arquivo, "- [ ] %s", ArrayTasks[i].nometask);
+    else
+      fprintf(arquivo, "- [x] %s", ArrayTasks[i].nometask);
+  }
+  fflush(arquivo);
+}
+
+void removerTarefa(int indice, Task *ArrayTasks, int *tamanho, FILE *arquivo) {
+  if (indice < 0 || indice >= *tamanho) {
+    printf("Índice inválido\n");
+    return;
+  }
+
+  free(ArrayTasks[indice].nometask);
+  for (int i = indice; i < *tamanho - 1; i++) {
+    ArrayTasks[i] = ArrayTasks[i + 1];
+  }
+
+  (*tamanho)--;
+  fseek(arquivo, 0, SEEK_SET);
+  for (int i = 0; i < *tamanho; i++) {
+    if (ArrayTasks[i].concluido == 0)
+      fprintf(arquivo, "\n- [ ] %s", ArrayTasks[i].nometask);
+    else
+      fprintf(arquivo, "\n- [x] %s", ArrayTasks[i].nometask);
+  }
+  fflush(arquivo);
+}
+
+void printToDoOptions() {
+  printf("\n\n");
+  printf("1. Adicionar task\n");
+  printf("2. Mudar status da task\n");
+  printf("3. Remover task\n");
+  printf("4. Listar tasks\n");
+  printf("5. Sair\n");
+}
+
+int main() {
+  FILE *toDo = NULL;
+  int resp;
+  int quantTasks = 0;
+  Task *ArrayTasks = NULL;
+  toDo = fopen("tasks.md", "r+");
+  int opcaoEmToDo;
+  novoTodo(toDo, &quantTasks, &ArrayTasks);
+  do {
+    printf("Qual função deseja acessar?\n1. Acessar To-Do List\n2. Sair\n");
+    scanf("%d", &resp);
+    switch (resp) {
+    case 1:
+      printToDoOptions();
+      scanf("%d", &opcaoEmToDo);
+      switch (opcaoEmToDo) {
+      case 1:
+        addTask(toDo, &ArrayTasks, &quantTasks);
+        fflush(toDo);
+        break;
+      case 2:
+        printf("Digite o índice da task que deseja alterar o status: ");
+        int indiceStatus;
+        scanf("%d", &indiceStatus);
+        alterarStatus(indiceStatus - 1, ArrayTasks, quantTasks, toDo);
+        break;
+      case 3:
+        printf("Digite o índice da task que deseja remover: ");
+        int indiceRemover;
+        scanf("%d", &indiceRemover);
+        removerTarefa(indiceRemover - 1, ArrayTasks, &quantTasks, toDo);
+        break;
+      case 4:
+        listarTasks(ArrayTasks, quantTasks);
+        break;
+      case 5:
+        break;
+      default:
+        printf("Opção inválida\n");
+      }
+      break;
+    case 2:
+      printf("Encerrando programa...\n");
+      break;
+    default:
+      printf("Opção inválida\n");
+    }
+  } while (resp != 2);
+
+  fclose(toDo);
+  return 0;
 }
